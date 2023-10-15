@@ -20,13 +20,13 @@ public enum WeekDays: String, CaseIterable {
 public struct Weather: Hashable {
     var day: WeekDays
     var image: String
-    var degrees: String
+    var degrees: Int
 }
 
 public class WeatherProvider {
-    static let components: [Weather] = [Weather(day: .tuesday, image: "cloud.sun.fill", degrees: "74°"),
-                                         Weather(day: .wednsday, image: "sun.max.fill", degrees: "70°"),
-                                         Weather(day: .thursday, image: "wind", degrees: "66°"),
-                                         Weather(day: .friday, image: "sunset.fill", degrees: "69°"),
-                                         Weather(day: .saturday, image: "moon.stars.fill", degrees: "55°")]
+    static let components: [Weather] = [Weather(day: .tuesday, image: "cloud.sun.fill", degrees: 74),
+                                         Weather(day: .wednsday, image: "sun.max.fill", degrees: 70),
+                                         Weather(day: .thursday, image: "wind", degrees: 66),
+                                         Weather(day: .friday, image: "sunset.fill", degrees: 69),
+                                         Weather(day: .saturday, image: "snowflake", degrees: 55)]
 }
