@@ -17,18 +17,18 @@ struct ContentView: View {
                            bottomColor: isNight ? .gray :  Color("lightblue"))
             VStack() {
                 CityTextView(cityName: "Cupertino, CA")
-                MainWeatherStatusView(imageName:  "cloud.sun.fill", 
+                MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
                                       degrees: 76)
                 .padding(.bottom, 40)
                 HStack(spacing: 20) {
                     ForEach(WeatherProvider.components, id: \.self) { component in
-                        WeatherDayView(day: component.day.rawValue, 
+                        WeatherDayView(day: component.day.rawValue,
                                        image: component.image,
                                        degrees: component.degrees)
                     }
                 }
                 Spacer()
-                WeatherButton(title: "Change day time", 
+                WeatherButton(title: "Change day time",
                               textColor: .blue,
                               backgroundColor: .white) {
                     isNight.toggle()
