@@ -15,39 +15,62 @@ struct ContentView: View {
         ZStack {
             BackgroundView(topColor: isNight ? .black : .blue,
                            bottomColor: isNight ? .gray :  Color("lightblue"))
-            VStack() {
-                CityTextView(cityName: viewModel.weather?.location?.name)
-                MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill")
-                .padding(.bottom, 40)
-                HStack(spacing: 20) {
-                    ForEach(viewModel.forecastDays ?? [Forecastday](), id: \.date) { forecastday in
-                        WeatherDayView(day: viewModel.getWeekDay(forecastday.date),
-                                       image: viewModel.getIcon(forecastday.day?.condition?.text),
-                                       degrees: forecastday.day?.avgtempC ?? 0)
-                    }
-                }
-                Spacer()
-                WeatherButton(title: "Change day time",
-                              textColor: .blue,
-                              backgroundColor: .white) {
-                    isNight.toggle()
-                }
-                Spacer()
-            }
             
+            if viewModel.isLoading {
+                LoadingView()
+            } else {
+                MainView(isNight: $isNight)
+            }
         }.onAppear {
             viewModel.fetchForecast()
         }.environment(viewModel)
     }
+    
 }
 
-
+//MARK: -Content Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
 
+//MARK: -State views
+struct LoadingView: View {
+    var body: some View {
+        ProgressView()
+            .frame(width: 200, height: 200, alignment: .center)
+            .progressViewStyle(.circular)
+    }
+}
+
+struct MainView: View {
+    @EnvironmentObject var viewModel: WeatherViewModel
+    @Binding var isNight: Bool
+    var body: some View {
+        VStack() {
+            CityTextView(cityName: viewModel.weather?.location?.name)
+            MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill")
+                .padding(.bottom, 40)
+            HStack(spacing: 20) {
+                ForEach(viewModel.forecastDays ?? [Forecastday](), id: \.date) { forecastday in
+                    WeatherDayView(day: viewModel.getWeekDay(forecastday.date),
+                                   image: viewModel.getIcon(forecastday.day?.condition?.text),
+                                   degrees: forecastday.day?.avgtempC ?? 0)
+                }
+            }
+            Spacer()
+            WeatherButton(title: "Change day time",
+                          textColor: .blue,
+                          backgroundColor: .white) {
+                isNight.toggle()
+            }
+            Spacer()
+        }
+    }
+}
+
+//MARK: -Components
 struct WeatherDayView: View {
     var day: String
     var image: String

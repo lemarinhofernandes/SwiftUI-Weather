@@ -15,6 +15,7 @@ class WeatherViewModel: ObservableObject, Observable {
     let weatherService: WeatherServiceProtocol
     @Published var weather: WeatherModel? = nil
     @Published var forecastDays: [Forecastday]? = [Forecastday]()
+    @Published var isLoading: Bool = false
     
     
     // MARK: -INITIALIZERS
@@ -63,6 +64,7 @@ class WeatherViewModel: ObservableObject, Observable {
     }
     
     func fetchForecast() {
+        isLoading = true
         weatherService.getForecast()
             .receive(on: RunLoop.main)
             .sink { data in
@@ -70,7 +72,7 @@ class WeatherViewModel: ObservableObject, Observable {
             } receiveValue: { [weak self] data in
                 self?.weather = data
                 self?.setForecast()
-                print(data)
+                self?.isLoading = false
             }.store(in: &cancellables)
     }
     
