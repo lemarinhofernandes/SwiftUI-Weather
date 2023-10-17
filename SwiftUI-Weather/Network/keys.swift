@@ -6,5 +6,5 @@
 //
 
 internal struct Keys {
-    static let weather_api = "de2cb2587c984bf6b4432708231710"
+    static let weather_api = ""
 }

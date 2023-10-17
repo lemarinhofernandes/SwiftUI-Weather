@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var viewModel = WeatherViewModel(weatherService: WeatherService())
-    @State private var isNight = false
+    @StateObject var viewModel = WeatherViewModel()
+    @State private var isNight = ContentViewHelper().isNight()
     
     var body: some View {
         ZStack {
@@ -17,6 +17,7 @@ struct ContentView: View {
                            bottomColor: isNight ? .gray :  Color("lightblue"))
             
             if viewModel.isLoading {
+                
                 LoadingView()
             } else {
                 MainView(isNight: $isNight)

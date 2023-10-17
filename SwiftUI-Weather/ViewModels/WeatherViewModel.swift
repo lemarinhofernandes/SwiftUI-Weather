@@ -15,11 +15,11 @@ class WeatherViewModel: ObservableObject, Observable {
     let weatherService: WeatherServiceProtocol
     @Published var weather: WeatherModel? = nil
     @Published var forecastDays: [Forecastday]? = [Forecastday]()
-    @Published var isLoading: Bool = false
+    @Published var isLoading = true
     
     
     // MARK: -INITIALIZERS
-    init(weatherService: WeatherServiceProtocol) {
+    init(weatherService: WeatherServiceProtocol = WeatherService()) {
         self.weatherService = weatherService
     }
     
@@ -99,14 +99,4 @@ class WeatherViewModel: ObservableObject, Observable {
         return "\(timeStamp[0])-\(timeStamp[1])-\(respectiveday)"
     }
     
-}
-
-public enum WeekDays {
-    static let monday = "MON"
-    static let tuesday = "TUE"
-    static let wednsday = "WED"
-    static let thursday = "THU"
-    static let friday = "FRI"
-    static let saturday = "SAT"
-    static let sunday = "SUN"
 }
