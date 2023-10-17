@@ -15,9 +15,8 @@ struct ContentView: View {
             BackgroundView(topColor: isNight ? .black : .blue,
                            bottomColor: isNight ? .gray :  Color("lightblue"))
             VStack() {
-                CityTextView(cityName: (viewModel.weather?.location?.name) ?? "")
-                MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
-                                      degrees: 76)
+                CityTextView(cityName: viewModel.weather?.location?.name ?? "")
+                MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill")
                 .padding(.bottom, 40)
                 HStack(spacing: 20) {
                     ForEach(WeatherProvider.components, id: \.self) { component in
@@ -36,7 +35,8 @@ struct ContentView: View {
             }
             
         }.onAppear {
-            viewModel.fetchForecast()        }
+            viewModel.fetchForecast()
+        }.environment(viewModel)
     }
 }
 
@@ -94,7 +94,7 @@ struct CityTextView: View {
 
 struct MainWeatherStatusView: View {
     var imageName: String
-    var degrees: Int
+    @EnvironmentObject var viewModel: WeatherViewModel
     
     var body: some View {
         VStack(spacing: 8) {
@@ -103,7 +103,7 @@ struct MainWeatherStatusView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 180, height: 180)
-            Text("\(degrees)°")
+            Text("\(String(format: "%.1f",viewModel.weather?.current?.tempC ?? 0))°")
                 .font(.system(size: 70, weight: .medium))
                 .foregroundColor(.white)
         }

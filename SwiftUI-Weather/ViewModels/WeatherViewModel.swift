@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class WeatherViewModel: ObservableObject {
+class WeatherViewModel: ObservableObject, Observable {
     private var cancellables = Set<AnyCancellable>()
     let weatherService: WeatherServiceProtocol
     @Published var weather: WeatherModel? = nil
@@ -18,12 +18,11 @@ class WeatherViewModel: ObservableObject {
     }
     
     func fetchForecast() {
+        let datadehj = Date()
         weatherService.getForecast()
             .receive(on: RunLoop.main)
             .sink { data in
-                print(data)
             } receiveValue: { [weak self] data in
-                print(data)
                 self?.weather = data
             }.store(in: &cancellables)
     }
