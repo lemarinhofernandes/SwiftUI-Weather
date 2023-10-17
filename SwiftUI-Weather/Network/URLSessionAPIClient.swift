@@ -16,9 +16,7 @@ class URLSessionAPIClient<EndpointType: APIEndpoint>: APIClient {
         request.httpMethod = endpoint.method.rawValue
         
         endpoint.headers?.forEach { request.addValue($0.value, forHTTPHeaderField: $0.key)}
-        endpoint.parameters?.forEach { request.addValue($0.value as! String, forHTTPHeaderField: $0.key)}
-        print(request)
-        
+        endpoint.parameters?.forEach { request.addValue($0.value as! String, forHTTPHeaderField: $0.key)}        
         return URLSession.shared.dataTaskPublisher(
             for: URLRequest(
                 url: URL(

@@ -10,19 +10,20 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewModel = WeatherViewModel(weatherService: WeatherService())
     @State private var isNight = false
+    
     var body: some View {
         ZStack {
             BackgroundView(topColor: isNight ? .black : .blue,
                            bottomColor: isNight ? .gray :  Color("lightblue"))
             VStack() {
-                CityTextView(cityName: viewModel.weather?.location?.name ?? "")
+                CityTextView(cityName: viewModel.weather?.location?.name)
                 MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill")
                 .padding(.bottom, 40)
                 HStack(spacing: 20) {
-                    ForEach(WeatherProvider.components, id: \.self) { component in
-                        WeatherDayView(day: component.day.rawValue,
-                                       image: component.image,
-                                       degrees: component.degrees)
+                    ForEach(viewModel.forecastDays ?? [Forecastday](), id: \.date) { forecastday in
+                        WeatherDayView(day: viewModel.getWeekDay(forecastday.date),
+                                       image: viewModel.getIcon(forecastday.day?.condition?.text),
+                                       degrees: forecastday.day?.avgtempC ?? 0)
                     }
                 }
                 Spacer()
@@ -50,7 +51,7 @@ struct ContentView_Previews: PreviewProvider {
 struct WeatherDayView: View {
     var day: String
     var image: String
-    var degrees: Int
+    var degrees: Double
     
     var body: some View {
         VStack(spacing: 8) {
@@ -62,8 +63,8 @@ struct WeatherDayView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 40, height: 40)
-            Text("\(degrees)°")
-                .font(.system(size: 28, weight: .medium))
+            Text("\(String(format: "%.1f", degrees))°")
+                .font(.system(size: 24, weight: .medium))
                 .foregroundColor(.white)
         }
     }
@@ -82,10 +83,10 @@ struct BackgroundView: View {
 }
 
 struct CityTextView: View {
-    var cityName: String
+    var cityName: String?
     
     var body: some View {
-        Text(cityName)
+        Text(cityName ?? String())
             .font(.system(size: 32, weight: .medium, design: .default))
             .foregroundColor(.white)
             .padding()

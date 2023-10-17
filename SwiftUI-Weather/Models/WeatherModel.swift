@@ -18,7 +18,7 @@ struct Current: Codable {
     let tempC: Double?
     let isDay: Int?
     let condition: Condition?
-
+    
     enum CodingKeys: String, CodingKey {
         case lastUpdated = "last_updated"
         case tempC = "temp_c"
@@ -29,10 +29,10 @@ struct Current: Codable {
 
 // MARK: - Condition
 struct Condition: Codable {
-        let text: WeatherText?
+    let text: WeatherText?
     
     enum CodingKeys: String, CodingKey {
-        case text = "Text"
+        case text = "text"
     }
 }
 
@@ -45,17 +45,31 @@ enum WeatherText: String, Codable {
 
 // MARK: - Forecast
 struct Forecast: Codable {
-    let forecastday: [Forecastday]?
+    var forecastday: [Forecastday]?
 }
 
 // MARK: - Forecastday
 struct Forecastday: Codable {
     let date: String?
     let day: Day?
-
+    
     enum CodingKeys: String, CodingKey {
         case date
         case day
+    }
+}
+
+extension Forecastday: Identifiable, Hashable {
+    var id: ObjectIdentifier {
+        return ObjectIdentifier(UUID.self)
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        return hasher.combine(id)
+    }
+    
+    static func == (lhs: Forecastday, rhs: Forecastday) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 
@@ -63,7 +77,7 @@ struct Forecastday: Codable {
 struct Day: Codable {
     let avgtempC: Double?
     let condition: Condition?
-
+    
     enum CodingKeys: String, CodingKey {
         case avgtempC = "avgtemp_c"
         case condition
@@ -75,7 +89,7 @@ struct Day: Codable {
 struct Location: Codable {
     let name: String?
     let localtime: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case name
         case localtime
