@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    @StateObject var viewModel = WeatherViewModel(weatherService: WeatherService())
     @State private var isNight = false
-    
     var body: some View {
         ZStack {
             BackgroundView(topColor: isNight ? .black : .blue,
                            bottomColor: isNight ? .gray :  Color("lightblue"))
             VStack() {
-                CityTextView(cityName: "Cupertino, CA")
+                CityTextView(cityName: (viewModel.weather?.location?.name) ?? "")
                 MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
                                       degrees: 76)
                 .padding(.bottom, 40)
@@ -35,9 +34,12 @@ struct ContentView: View {
                 }
                 Spacer()
             }
-        }
+            
+        }.onAppear {
+            viewModel.fetchForecast()        }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
