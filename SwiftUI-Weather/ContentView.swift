@@ -39,9 +39,15 @@ struct ContentView_Previews: PreviewProvider {
 //MARK: -State views
 struct LoadingView: View {
     var body: some View {
-        ProgressView()
-            .frame(width: 200, height: 200, alignment: .center)
-            .progressViewStyle(.circular)
+        VStack(alignment: .center) {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .padding(5)
+            Text("Loading")
+                .font(.system(size: 22, weight: .medium))
+                .foregroundStyle(.gray)
+        }
+       
     }
 }
 
