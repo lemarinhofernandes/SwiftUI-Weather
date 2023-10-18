@@ -57,7 +57,9 @@ struct MainView: View {
     var body: some View {
         VStack() {
             CityTextView(cityName: viewModel.weather?.location?.name)
-            MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill")
+            MainWeatherStatusView(imageName: isNight
+                                  ? "moon.stars.fill"
+                                  : (viewModel.getIcon(viewModel.weather?.current?.condition?.text)))
                 .padding(.bottom, 40)
             HStack(spacing: 20) {
                 ForEach(viewModel.forecastDays ?? [Forecastday](), id: \.date) { forecastday in
